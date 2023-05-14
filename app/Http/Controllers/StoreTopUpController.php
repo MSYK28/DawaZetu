@@ -49,12 +49,22 @@ class StoreTopUpController extends Controller
      */
     public function create()
     {
-        $topups = TopUp::all();
-        $topupDetails = FacilityProduct::get();
         $products = Product::all();
         $facilities = Facility::all();
 
-        return view('storetopup.create', compact(['topups', 'topupDetails', 'products', 'facilities']));
+        $topups = TopUp::all();
+        $topupDetails = FacilityProduct::get();
+
+        foreach ($topupDetails as $topupDetail) {
+
+            if ($topupDetail->quantity <= $topupDetail->reorder_level) {
+                $product_id = $topupDetail->product_id;
+
+                $products = Product::where('id', '=', $product_id)->get();
+                $reorderLevels = FacilityProduct::where('quantity', '<=', $topupDetail->reorder_level)->get();
+            }
+        }
+        return view('storetopup.create', compact(['topups', 'topupDetails', 'products', 'facilities', 'reorderLevels']));
     }
 
     /**

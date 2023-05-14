@@ -61,10 +61,10 @@
                                     <label class="form-label" for="facility_id">Facility</label>
                                     <select name="facility_id" id="" class="form-select">
                                         @foreach ($facilities as $facility)
-                                            <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                        <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                         @endforeach
                                     </select>
-                                    
+
                                 </div>
                             </div><!-- Col -->
                             <div class="col-sm-3">
@@ -76,56 +76,164 @@
                         </div><!-- Row -->
 
                         {{-- <hr> --}}
-                        <h4 class="card-title mt-4">Request Medicines</h4>
-                        <p class="text-muted mb-4">Add Medicines</p>
+                        {{-- <div class="row">
+                            <h4 class="card-title mt-4">Request Medicines</h4>
+                            <p class="text-muted mb-4">Add Medicines</p>
 
-                        <div class="table-holder">
-                            <table class="table table-responsive table-bordered" id="table">
-                                <thead>
-                                    <tr>
-                                        <th class="pt-0">#</th>
-                                        <th class="pt-0">Product Name</th>
-                                        <th class="pt-0">Strength</th>
-                                        <th class="pt-0">Unit of Issue</th>
-                                        <th class="pt-0">Unit Size</th>
-                                        <th class="pt-0">Available Units</th>
-                                        <th class="pt-0">Requested Units</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $number = 1; ?>
-                                    <tr>
-                                        <td>{{ $number }}</td>
-                                        <?php $number++; ?>
-                                        <td>
-                                            <select name="product_name[]" class="js-example-basic-single form-select" data-width="100%">
-                                                <option value="">Select Medicine</option>
-                                                @foreach ($products as $product)
-                                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="strength[]" placeholder="Strength" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="number" name="unit_of_issue[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="number" name="unit_size[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="number" name="available_units[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="number" name="requested_units[]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-success" name="add" id="add">Add More</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-holder">
+                                <table class="table table-responsive table-bordered" id="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="pt-0">#</th>
+                                            <th class="pt-0">Product Name</th>
+                                            <th class="pt-0">Strength</th>
+                                            <th class="pt-0">Unit of Issue</th>
+                                            <th class="pt-0">Unit Size</th>
+                                            <th class="pt-0">Available Units</th>
+                                            <th class="pt-0">Requested Units</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $number = 1; ?>
+                                        <tr>
+                                            <td>{{ $number }}</td>
+                                            <?php $number++; ?>
+                                            <td>
+                                                <select name="product_name[]"
+                                                    class="js-example-basic-single form-select" data-width="100%">
+                                                    <option value="">Select Medicine</option>
+                                                    @foreach ($products as $product)
+                                                    <option value="{{ $product->id }}">{{ $product->product_name }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="strength[]" placeholder="Strength"
+                                                    class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="unit_of_issue[]" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="unit_size[]" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="available_units[]" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="requested_units[]" class="form-control">
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-sm btn-success" name="add" id="add">Add More</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> --}}
+
+                        <div class="row">
+                            <div class="col-md-12 stretch-card">
+                                <div class="card">
+                                    
+                                    <div class="card-body">
+                                        
+                                            <h6 class="card-title">Top Up Table</h6>
+                                            <div class="table-responsive">
+                                            <table class="table table-striped table-bordered" id="dataTableExample">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="pt-0">#</th>
+                                                        <th class="pt-0">Product Name</th>
+                                                        <th class="pt-0">Strength</th>
+                                                        <th class="pt-0">Unit of Issue</th>
+                                                        <th class="pt-0">Unit Size</th>
+                                                        <th class="pt-0">Available Units</th>
+                                                        <th class="pt-0">Requested Units</th>
+                                                        {{-- <th class="pt-0">Facility</th> --}}
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $number = 1; ?>
+                                                    @foreach ($reorderLevels as $reorderLevel)
+                                                        @if ($reorderLevel->quantity <= $reorderLevel->reorder_level_back_store)
+                                                        @foreach ($products as $product)
+                                                            
+                                                        <tr>
+                                                            <td>{{ $number }}</td>
+                                                            <?php $number++; ?>
+                            
+                                                            <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="product_name[]" 
+                                                                    value="{{ $reorderLevel->product_id }}" class="form-control">
+                                                                </div>
+                                                                @if ( $reorderLevel->product_id = $product->id)
+                                                                    {{ $product->product_name }}
+                                                                @endif
+                                                            </td>
+    
+                                                                                        
+                                                            <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="strength[]" 
+                                                                    value="{{ $product->strength }}" class="form-control">
+                                                                </div>
+                                                                {{ $product->strength }}
+                                                            </td>
+                            
+                                                            <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="unit_of_issue[]" 
+                                                                    value="{{ $product->unit_of_measure }}" class="form-control">
+                                                                </div>
+                                                                {{ $product->unit_of_measure }}
+                                                            </td>
+                            
+                                                            <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="unit_size[]" 
+                                                                    value="{{ $product->package_size }}" class="form-control">
+                                                                </div>
+                                                                {{ $product->package_size }}
+                                                            </td>
+                            
+                                                            <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="available_units[]" 
+                                                                    value="{{ $product->package_quantity }}" class="form-control">
+                                                                </div>
+                                                                {{ $product->package_quantity }}
+                                                            </td>
+                            
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <input type="number" name="requested_units[]" 
+                                                                    class="form-control"
+                                                                    value="{{ $product->requested_units }}">
+                                                                </div>
+                                                            </td>
+    
+    
+                                                            {{-- <td>
+                                                                <div class="form-group hidden">
+                                                                    <input hidden type="text" name="facility[]" 
+                                                                    class="form-control"
+                                                                    value="{{ $reorderLevel->facility }}">
+                                                                </div>
+                                                                {{ $reorderLevel->facility }}
+                                                            </td> --}}
+                                                        </tr>
+                                                        @endforeach
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer">
